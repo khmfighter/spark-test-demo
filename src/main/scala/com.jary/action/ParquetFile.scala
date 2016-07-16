@@ -5,7 +5,7 @@ import org.apache.spark.{SparkContext, SparkConf}
 /**
  * Created by spark on 11/21/15.
  */
-//case class log(ip: String, ps: String)
+case class log(ip: String, ps: String)
 object ParquetFile {
 
   def main(args: Array[String]) {
