@@ -1,5 +1,7 @@
 package test
 
+import org.apache.spark.{SparkConf, SparkContext}
+
 /**
  * Created by spark on 11/19/15.
  */
@@ -10,7 +12,11 @@ object WordCount {
 
   def main(args: Array[String]) {
 
-    // sc.textFile("hdfs://").flatmap(_.sptlt(" ")).map(_,1).reduceByKey(_ + _).map(x._2,x._1).sortbykey(fals).map(x._2,x._1).saveAsTextFile("hdfs://")
+    val conf = new SparkConf().setAppName("other count").setMaster("local[2]")
+    val sc = new SparkContext(conf)
+
+//    sc.textFile(".gitignore").flatmap(_.sptlt(" "))
+//      .map(_,1).reduceByKey(_ + _).map(x._2,x._1).sortbykey(fals).map(x._2,x._1).saveAsTextFile("bb")
   }
 
 }

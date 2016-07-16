@@ -1,6 +1,5 @@
 package com.jary.action
 
-import org.apache.spark.sql.SQLContext
 import org.apache.spark.{SparkContext, SparkConf}
 
 /**
@@ -16,7 +15,7 @@ object ParquetFile {
     val sc = new SparkContext(conf)
 
     println("here....3")
-    val sqlContext = new SQLContext(sc)
+    val sqlContext = new  org.apache.spark.sql.SQLContext(sc)
 
     //hdfs://master:8000/data/people.txt
     // this is used to implicitly convert an RDD to a DataFrame.

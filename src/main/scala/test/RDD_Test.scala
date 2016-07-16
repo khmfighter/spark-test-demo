@@ -2,18 +2,16 @@ package test
 
 import _root_.org.apache.spark.{SparkContext, SparkConf}
 
-
 /**
  * Created by spark on 12/4/15. 4525224k total,
  *                              2192540k
-
  */
 object RDD_Test {
 
   def main(args: Array[String]) {
 
  // Log_Sc()
-    val conf = new SparkConf().setAppName("rdd_text")//.setMaster("local[2]")
+    val conf = new SparkConf().setAppName("rdd_text").setMaster("local[2]")
     val sc = new SparkContext(conf)
 
     val rdd1 = sc.parallelize(1 to 5)

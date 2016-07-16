@@ -3,7 +3,7 @@ package com.extr
 import java.util
 
 import org.apache.spark.{SparkConf, SparkContext}
-import org.spark_project.guava.net.HostAndPort
+import redis.clients.jedis.{HostAndPort, JedisCluster, JedisPoolConfig}
 
 
 /**
@@ -12,7 +12,7 @@ import org.spark_project.guava.net.HostAndPort
 object WordCount {
 
   def main(args: Array[String]) {
-    val conf = new SparkConf().setAppName("Spark Pi").setMaster("spark://master99:7077")
+    val conf = new SparkConf().setAppName("Spark Pi").setMaster("local[4]")//.setMaster("spark://master99:7077")
     val spark = new SparkContext(conf)
 
 
