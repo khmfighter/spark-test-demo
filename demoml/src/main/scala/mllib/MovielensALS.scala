@@ -2,11 +2,8 @@ package mllib
 
 import java.io.File
 
-import com.jary.Log_Sc
-import org.apache.spark.mllib.recommendation.{ALS, MatrixFactorizationModel, Rating}
-import org.apache.spark.rdd.RDD
+//import com.jary.Log_Sc
 
-import org.apache.spark.{SparkContext, SparkConf}
 
 import scala.io.Source
 ;
@@ -17,7 +14,7 @@ import scala.io.Source
 object MovielensALS {
 
   def main(args: Array[String]) {
-    Log_Sc()
+    //Log_Sc()
 
     val conf = new SparkConf().setAppName("MovielensALS").setMaster("local[2]")
     val sc = new SparkContext(conf)

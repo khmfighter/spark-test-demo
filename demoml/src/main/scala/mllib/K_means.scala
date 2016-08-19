@@ -1,6 +1,6 @@
 package mllib
 
-import com.jary.Log_Sc
+//import com.jary.s
 import org.apache.spark.mllib.clustering.KMeans
 import org.apache.spark.mllib.linalg.Vectors
 import org.apache.spark.{SparkContext, SparkConf}
@@ -12,7 +12,7 @@ import org.apache.spark.{SparkContext, SparkConf}
 object K_means {
 
   def main(args: Array[String]) {
-    Log_Sc()
+    //Log_Sc()
     val conf = new SparkConf().setAppName("kmeans").setMaster("local[2]")
     val sc  = new SparkContext(conf)
 
