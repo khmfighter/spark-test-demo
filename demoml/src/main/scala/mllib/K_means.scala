@@ -16,7 +16,7 @@ object K_means {
     val conf = new SparkConf().setAppName("kmeans").setMaster("local[2]")
     val sc  = new SparkContext(conf)
 
-    val data = sc.textFile("/home/spark/Desktop/MyIntellij/SparkInAction/src/main/scala/mllib/kmeans_data.txt",1)
+    val data = sc.textFile("/home/spark/Desktop/MyIntellij/SparkInAction/src/main/scala/demo.app.mllib/kmeans_data.txt",1)
     val parsedata = data.map(s => Vectors.dense(s.split(" ").map(_.toDouble)))
 
     val numcluster = 3
@@ -35,14 +35,14 @@ object K_means {
     //only return result
 //    val d = data.map(s => Vectors.dense(s.split(" ").map(_.toDouble)))
 //    val result = model.predict(d)
-//    result.saveAsTextFile("/home/spark/Desktop/MyIntellij/SparkInAction/src/main/scala/mllib/result")
+//    result.saveAsTextFile("/home/spark/Desktop/MyIntellij/SparkInAction/src/main/scala/demo.app.mllib/result")
 
     val result2= data.map{
       line =>
         val lineVector = Vectors.dense(line.split(' ').map(_.toDouble))
         val prediction = model.predict(lineVector)
         line +" "+prediction
-    }.saveAsTextFile("/home/spark/Desktop/MyIntellij/SparkInAction/src/main/scala/mllib/result2")
+    }.saveAsTextFile("/home/spark/Desktop/MyIntellij/SparkInAction/src/main/scala/demo.app.mllib/result2")
 
     sc.stop()
 

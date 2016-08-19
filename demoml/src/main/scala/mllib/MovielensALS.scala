@@ -22,10 +22,10 @@ object MovielensALS {
     val conf = new SparkConf().setAppName("MovielensALS").setMaster("local[2]")
     val sc = new SparkContext(conf)
 
-    val myRatings = loadRatings("/home/spark/Desktop/data/mllib/personalRatings.txt")
+    val myRatings = loadRatings("/home/spark/Desktop/data/demo.app.mllib/personalRatings.txt")
     val myRatingsRDD = sc.parallelize(myRatings, 1)
 
-    val movieLensHomedir ="/home/spark/Desktop/data/mllib/medium/"
+    val movieLensHomedir ="/home/spark/Desktop/data/demo.app.mllib/medium/"
 
     val ratings = sc.textFile(new File(movieLensHomedir, "ratings.dat").toString).map({
       lines => val fields = lines.split("::")
