@@ -43,8 +43,8 @@ class Pong extends Actor {
 
 object PingPongTest extends App {
   val system = ActorSystem("PingPongSystem")
-  val pong = system.actorOf(Props[Pong], name = "pong")
-  val ping = system.actorOf(Props(new Ping(pong)), name = "ping")
+  val pong = system.actorOf(Props[Pong], "pong")
+  val ping = system.actorOf(Props(new Ping(pong)), "ping")
   // start them going
-  ping ! StartMessage
+  ping ? StartMessage
 }
