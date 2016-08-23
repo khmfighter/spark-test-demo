@@ -20,6 +20,7 @@ package com.test.lib
 // scalastyle:off println
 
 // $example on$
+import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.ml.clustering.KMeans
 // $example off$
 import org.apache.spark.sql.SparkSession
@@ -34,8 +35,10 @@ import org.apache.spark.sql.SparkSession
 object KMeansExample {
 
   def main(args: Array[String]): Unit = {
+    val conf = new SparkConf().setAppName("sqlonspark2").setMaster("local")
+    val sc = new SparkContext(conf)
     val spark = SparkSession
-      .builder
+      .builder.master("local[4]")
       .appName(s"${this.getClass.getSimpleName}")
       .getOrCreate()
 

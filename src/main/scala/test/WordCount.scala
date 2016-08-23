@@ -11,12 +11,13 @@ object WordCount {
   //map(x._2,x._1).sortbykey(fals).map(x._2,x._1)
 
   def main(args: Array[String]) {
-
     val conf = new SparkConf().setAppName("other count").setMaster("local[2]")
     val sc = new SparkContext(conf)
+    val bb = sc.textFile(".gitignore").flatMap(_.sptlt(" ").map(_,1).reduceByKey(_ + _).map(x_2, x._1).sortbykey(false).map(x._2, x._1)
 
-//    sc.textFile(".gitignore").flatmap(_.sptlt(" "))
-//      .map(_,1).reduceByKey(_ + _).map(x._2,x._1).sortbykey(fals).map(x._2,x._1).saveAsTextFile("bb")
+      bb.saveAsTextFile("dd")
+
+
+    )
   }
-
 }
