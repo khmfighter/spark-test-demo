@@ -3,8 +3,8 @@ package mllib
 //import com.jary.s
 import org.apache.spark.mllib.clustering.KMeans
 import org.apache.spark.mllib.linalg.Vectors
-import org.apache.spark.{SparkContext, SparkConf}
-;
+import org.apache.spark.sql.SparkSession
+import org.apache.spark.{SparkConf, SparkContext}
 
 /**
  * Created by spark on 12/2/15.
@@ -13,36 +13,25 @@ object K_means {
 
   def main(args: Array[String]) {
     //Log_Sc()
-    val conf = new SparkConf().setAppName("kmeans").setMaster("local[2]")
-    val sc  = new SparkContext(conf)
+    val spark = SparkSession
+      .builder
+      .appName(s"${this.getClass.getSimpleName}")
+      .getOrCreate()
 
-    val data = sc.textFile("/home/spark/Desktop/MyIntellij/SparkInAction/src/main/scala/demo.app.mllib/kmeans_data.txt",1)
-    val parsedata = data.map(s => Vectors.dense(s.split(" ").map(_.toDouble)))
+    // Loads data.
+    val dataset = spark.read.format("libsvm").load("data/mllib/sample_kmeans_data.txt")
 
-    val numcluster = 3
-    val numiteraters = 20
-    val model = KMeans.train(parsedata,numcluster,numiteraters)
+    // Trains a k-means model.
+    val kmeans = new KMeans().setK(2).setSeed(1L)
+    val model = kmeans.fit(dataset)
 
-    println("cluster centers")
-    for (c <- model.clusterCenters ) println("..."+c.toString )
+    // Evaluate clustering by computing Within Set Sum of Squared Errors.
+    val WSSSE = model.computeCost(dataset)
+    println(s"Within Set Sum of Squared Errors = $WSSSE")
 
-    val cost = model.computeCost(parsedata)
-
-    println("within set sum of squared errors = "+ cost)
-
-  //  println("vectors 0.2 0.2 0.2 is belong to clustders:"+ model.predict(Vectors.dense("0.2 0.1 0.2".split(" ").map(_.toDouble))))
-
-    //only return result
-//    val d = data.map(s => Vectors.dense(s.split(" ").map(_.toDouble)))
-//    val result = model.predict(d)
-//    result.saveAsTextFile("/home/spark/Desktop/MyIntellij/SparkInAction/src/main/scala/demo.app.mllib/result")
-
-    val result2= data.map{
-      line =>
-        val lineVector = Vectors.dense(line.split(' ').map(_.toDouble))
-        val prediction = model.predict(lineVector)
-        line +" "+prediction
-    }.saveAsTextFile("/home/spark/Desktop/MyIntellij/SparkInAction/src/main/scala/demo.app.mllib/result2")
+    // Shows the result.
+    println("Cluster Centers: ")
+    model.clusterCenters.foreach(println)
 
     sc.stop()
 
