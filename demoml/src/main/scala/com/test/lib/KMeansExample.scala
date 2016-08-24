@@ -20,6 +20,7 @@ package com.test.lib
 // scalastyle:off println
 
 // $example on$
+import org.apache.log4j.{Level, Logger}
 import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.ml.clustering.KMeans
 // $example off$
@@ -33,13 +34,16 @@ import org.apache.spark.sql.SparkSession
  * }}}
  */
 object KMeansExample {
-
+  //System.setProperty("hadoop.home.dir", "C:\\Program Files (x86)\\hadoop-common-2.2.0-bin-master\\bin");
   def main(args: Array[String]): Unit = {
-    val conf = new SparkConf().setAppName("sqlonspark2").setMaster("local")
-    val sc = new SparkContext(conf)
+    Logger.getLogger("org.apache.spark").setLevel(Level.WARN)
+    //Logger.getLogger("org.apache.spark").setLevel(Level.INFO)
+    Logger.getLogger("org.eclipse.jetty.server").setLevel(Level.OFF)
+//    val conf = new SparkConf().setAppName("sqlonspark2").setMaster("local")
+//    val sc = new SparkContext(conf)
     val spark = SparkSession
-      .builder.master("local[4]")
-      .appName(s"${this.getClass.getSimpleName}")
+      .builder.master("local[2]")
+      .appName(s"${this.getClass.getSimpleName}").config("spark.sql.warehouse.dir","file:///")
       .getOrCreate()
 
     // $example on$

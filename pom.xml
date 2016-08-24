@@ -17,6 +17,7 @@
     <modules>
         <module>demoAkka</module>
         <module>demoml</module>
+        <module>demoold</module>
     </modules>
 
     <properties>
