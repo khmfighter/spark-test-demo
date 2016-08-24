@@ -15,58 +15,51 @@
  * limitations under the License.
  */
 
-package com.test.lib
+package com.test.lib.k_means
 
 // scalastyle:off println
 
 // $example on$
-import org.apache.log4j.{Level, Logger}
-import org.apache.spark.{SparkConf, SparkContext}
-import org.apache.spark.ml.clustering.KMeans
+import org.apache.spark.ml.clustering.BisectingKMeans
 // $example off$
 import org.apache.spark.sql.SparkSession
 
 /**
- * An example demonstrating k-means clustering.
+ * An example demonstrating bisecting k_means clustering.
  * Run with
  * {{{
- * bin/run-example ml.KMeansExample
+ * bin/run-example ml.BisectingKMeansExample
  * }}}
  */
-object KMeansExample {
-  //System.setProperty("hadoop.home.dir", "C:\\Program Files (x86)\\hadoop-common-2.2.0-bin-master\\bin");
-  //Spark_Log.apply()
+object BisectingKMeansExample2 {
+
   def main(args: Array[String]): Unit = {
-   // Logger.getLogger("org.apache.spark").setLevel(Level.WARN)
-   // Logger.getLogger("org.eclipse.jetty.server").setLevel(Level.OFF)
-
-//    val conf = new SparkConf().setAppName("sqlonspark2").setMaster("local")
-//    val sc = new SparkContext(conf)
-
-
+    // Creates a SparkSession
     val spark = SparkSession
-      .builder.master("local[4]")
-      .appName(s"${this.getClass.getSimpleName}").config("spark.sql.warehouse.dir","file:///")
+      .builder
+      .appName("BisectingKMeansExample")
       .getOrCreate()
 
     // $example on$
     // Loads data.
     val dataset = spark.read.format("libsvm").load("data/mllib/sample_kmeans_data.txt")
 
-    // Trains a k-means model.
-    val kmeans = new KMeans().setK(2).setSeed(1L)
-    val model = kmeans.fit(dataset)
+    // Trains a bisecting k_means model.
+    val bkm = new BisectingKMeans().setK(2).setSeed(1)
+    val model = bkm.fit(dataset)
 
-    // Evaluate clustering by computing Within Set Sum of Squared Errors.
-    val WSSSE = model.computeCost(dataset)
-    println(s"Within Set Sum of Squared Errors = $WSSSE")
+    // Evaluate clustering.
+    val cost = model.computeCost(dataset)
+    println(s"Within Set Sum of Squared Errors = $cost")
 
     // Shows the result.
     println("Cluster Centers: ")
-    model.clusterCenters.foreach(println)
+    val centers = model.clusterCenters
+    centers.foreach(println)
     // $example off$
 
     spark.stop()
   }
 }
 // scalastyle:on println
+

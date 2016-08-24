@@ -1,7 +1,6 @@
-package com.test.lib
+package utils
 
 import org.apache.spark.{SparkConf, SparkContext}
-import org.apache.spark.sql.SparkSession
 
 /**
   * Created by Administrator on 2016/8/23 0023.

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.test.lib
+package com.test.lib.k_means
 
 // scalastyle:off println
 import org.apache.spark.{SparkConf, SparkContext}
@@ -26,7 +26,7 @@ import org.apache.spark.mllib.linalg.{Vector, Vectors}
 // $example off$
 
 /**
- * An example demonstrating a bisecting k-means clustering in spark.mllib.
+ * An example demonstrating a bisecting k_means clustering in spark.mllib.
  *
  * Run with
  * {{{
