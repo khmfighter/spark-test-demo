@@ -2,11 +2,11 @@ package mllib
 
 import java.io.File
 
+import org.apache.spark.mllib.recommendation.{ALS, MatrixFactorizationModel, Rating}
+import org.apache.spark.{SparkConf, SparkContext}
+
 //import com.jary.Log_Sc
 
-
-import scala.io.Source
-;
 
 /**
  * Created by spark on 12/2/15.

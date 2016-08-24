@@ -15,9 +15,9 @@ object Log_Sc {
 
   }
 
-  def lo_Sc(s:String): SparkContext ={
-    val conf = new SparkConf().setAppName(s).setMaster("local[2]")
-    val sc = new SparkContext(conf)
-    sc
-  }
+//  def lo_Sc(s:String): SparkContext ={
+//    val conf = new SparkConf().setAppName(s).setMaster("local[2]")
+//    val sc = new SparkContext(conf)
+//    sc
+//  }
 }

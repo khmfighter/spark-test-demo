@@ -2,9 +2,7 @@ package mllib
 
 //import com.jary.s
 import org.apache.spark.mllib.clustering.KMeans
-import org.apache.spark.mllib.linalg.Vectors
 import org.apache.spark.sql.SparkSession
-import org.apache.spark.{SparkConf, SparkContext}
 
 /**
  * Created by spark on 12/2/15.
