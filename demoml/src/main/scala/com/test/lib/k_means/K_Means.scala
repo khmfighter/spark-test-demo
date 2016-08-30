@@ -18,6 +18,9 @@
 // scalastyle:off println
 package com.test.lib.k_means
 
+import java.util.Random
+
+import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
 import utils.Spark_Log
 // $example on$
@@ -25,11 +28,11 @@ import org.apache.spark.mllib.clustering.{KMeans, KMeansModel}
 import org.apache.spark.mllib.linalg.Vectors
 // $example off$
 
-object KMeansExample2 {
+object K_Means {
 
   def main(args: Array[String]) {
     Spark_Log() //config("spark.sql.warehouse.dir","file:///")
-    val conf = new SparkConf().setAppName("KMeansExample2").setMaster("local[4]").set("spark.sql.warehouse.dir","file:///")
+    val conf = new SparkConf().setAppName("KMeansExample2").setMaster("local[3]").set("spark.sql.warehouse.dir","file:///")
     val sc = new SparkContext(conf)
 
     // $example on$
@@ -38,17 +41,26 @@ object KMeansExample2 {
     val parsedData = data.map(s => Vectors.dense(s.split(' ').map(_.toDouble))).cache()
 
     // Cluster the data into two classes using KMeans
-    val numClusters = 2 //最大分类数
+    val numClusters = 6 //最大分类数
     val numIterations = 20 //迭代次数
     val clusters = KMeans.train(parsedData, numClusters, numIterations) //训练模型
 
-    // Evaluate clustering by computing Within Set Sum of Squared Errors
+   // data.foreach(println)
+
+    //option1
+    clusters.clusterCenters.foreach(println)
+
+    val x = sc.parallelize(Seq(Vectors.dense(0.2, 0.2 ,0.2)))
+    val pro = clusters.predict(x).foreach(println)
+
+    //option2
+    // Evaluate clustering by computing Within Set Sum of Squared Errors 通过计算平方差 来评估聚类分
     val WSSSE = clusters.computeCost(parsedData)
-    println("Within Set Sum of Squared Errors = " + WSSSE)
+    println("Within Set Sum of Squared Errors = " + WSSSE) //平方误差的和
 
     // Save and load model
-    clusters.save(sc, "target/KMeansExample/KMeansModel")
-    val sameModel = KMeansModel.load(sc, "target/KMeansExample/KMeansModel")
+    //clusters.save(sc, "demoml/target/KMeansExample/KMeansModel")
+    //val sameModel = KMeansModel.load(sc, "demoml/target/KMeansExample/KMeansModel")
     // $example off$
 
     sc.stop()

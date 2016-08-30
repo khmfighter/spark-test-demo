@@ -20,6 +20,7 @@ package com.test.lib.k_means
 // scalastyle:off println
 
 // $example on$
+import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.ml.clustering.KMeans
 // $example off$
 import org.apache.spark.sql.SparkSession
@@ -37,8 +38,7 @@ object KMeansExample {
   def main(args: Array[String]): Unit = {
    // Logger.getLogger("org.apache.spark").setLevel(Level.WARN)
    // Logger.getLogger("org.eclipse.jetty.server").setLevel(Level.OFF)
-
-//    val conf = new SparkConf().setAppName("sqlonspark2").setMaster("local")
+//   val conf = new SparkConf().setAppName("KMeansExample2").setMaster("local[4]").set("spark.sql.warehouse.dir","file:///")
 //    val sc = new SparkContext(conf)
 
 
@@ -52,7 +52,7 @@ object KMeansExample {
     val dataset = spark.read.format("libsvm").load("data/mllib/sample_kmeans_data.txt")
 
     // Trains a k_means model.
-    val kmeans = new KMeans().setK(2).setSeed(1L)
+    val kmeans = new KMeans().setK(4).setSeed(1L)
     val model = kmeans.fit(dataset)
 
     // Evaluate clustering by computing Within Set Sum of Squared Errors.
