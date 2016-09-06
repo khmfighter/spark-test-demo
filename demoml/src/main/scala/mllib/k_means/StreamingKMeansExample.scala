@@ -16,7 +16,7 @@
  */
 
 // scalastyle:off println
-package com.test.lib.k_means
+package mllib.k_means
 
 import org.apache.spark.SparkConf
 // $example on$

@@ -1,5 +1,5 @@
 
-package com.test.lib.k_means
+package mllib.k_means
 
 import java.util
 

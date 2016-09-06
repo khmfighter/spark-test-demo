@@ -1,6 +1,5 @@
-package com.test.lib.k_means;
+package mllib.k_means;
 
-import javafx.scene.paint.Stop;
 import org.apache.spark.mllib.clustering.KMeansModel;
 
 import java.util.List;
@@ -9,6 +8,18 @@ import java.util.List;
  * Created by Administrator on 2016/9/2 0002.
  */
 public class KMeans_Java {
+
+
+    public static void main(String [] a){
+        String datadir = "data/mllib/kmeans_data.txt";
+        KMeans_Java kmsjava =  new KMeans_Java(datadir);
+        KMeansModel kmd =  kmsjava.clusterS(2,29);
+        // kmsjava.printClusters(kmd);
+        //System.out.println("欧几里得："+kmsjava.euclid(kmd));
+        System.out.println(kmsjava.SCall(kmd));
+        kmsjava.stop();
+    }
+
     static K_Means km=null;
     public KMeans_Java(String datadir){
         km = new K_Means(datadir);
