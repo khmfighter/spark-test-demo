@@ -15,15 +15,12 @@
  * limitations under the License.
  */
 
-package mllib.k_means
+package ml
 
 // scalastyle:off println
 
 // $example on$
-import org.apache.commons.math3.ml.distance.EuclideanDistance
 import org.apache.spark.ml.clustering.{KMeans, KMeansModel}
-import org.apache.spark.rdd.RDD
-import org.apache.spark.sql.Row
 import utils.Spark_Log
 // $example off$
 import org.apache.spark.sql.SparkSession

@@ -3,6 +3,7 @@ package mllib.k_means
 
 import java.util
 
+import ml.K_Means
 import org.apache.commons.math3.ml.distance.EuclideanDistance
 import org.apache.spark.mllib.linalg.Vector
 import org.apache.spark.mllib.clustering.{KMeans, KMeansModel}

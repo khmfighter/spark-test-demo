@@ -15,39 +15,51 @@
  * limitations under the License.
  */
 
-// scalastyle:off println
 package ml
 
+// scalastyle:off println
+
 // $example on$
-import org.apache.spark.ml.classification.LogisticRegression
+import org.apache.spark.ml.clustering.BisectingKMeans
 // $example off$
 import org.apache.spark.sql.SparkSession
 
-object LogisticRegressionWithElasticNetExample {
+/**
+ * An example demonstrating bisecting k_means clustering.
+ * Run with
+ * {{{
+ * bin/run-example ml.BisectingKMeansExample
+ * }}}
+ */
+object BisectingKMeansExample2 {
 
   def main(args: Array[String]): Unit = {
+    // Creates a SparkSession
     val spark = SparkSession
       .builder
-      .appName("LogisticRegressionWithElasticNetExample")
+      .appName("BisectingKMeansExample")
       .getOrCreate()
 
     // $example on$
-    // Load training data
-    val training = spark.read.format("libsvm").load("data/mllib/sample_libsvm_data.txt")
+    // Loads data.
+    val dataset = spark.read.format("libsvm").load("data/mllib/sample_kmeans_data.txt")
 
-    val lr = new LogisticRegression()
-      .setMaxIter(10)
-      .setRegParam(0.3)
-      .setElasticNetParam(0.8)
+    // Trains a bisecting k_means model.
+    val bkm = new BisectingKMeans().setK(2).setSeed(1)
+    val model = bkm.fit(dataset)
 
-    // Fit the model
-    val lrModel = lr.fit(training)
+    // Evaluate clustering.
+    val cost = model.computeCost(dataset)
+    println(s"Within Set Sum of Squared Errors = $cost")
 
-    // Print the coefficients and intercept for logistic regression
-    println(s"Coefficients: ${lrModel.coefficients} Intercept: ${lrModel.intercept}")
+    // Shows the result.
+    println("Cluster Centers: ")
+    val centers = model.clusterCenters
+    centers.foreach(println)
     // $example off$
 
     spark.stop()
   }
 }
 // scalastyle:on println
+
