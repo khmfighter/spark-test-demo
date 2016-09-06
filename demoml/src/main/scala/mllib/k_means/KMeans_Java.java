@@ -6,9 +6,7 @@ import org.apache.spark.mllib.linalg.Vector;
 import java.util.List;
 
 /**
- * @author Jary
-   @version 1.0.0
-   Created by Jary on 2016/9/2 0002.
+ * Created by Jary on 2016/9/2 0002.
  */
 public class KMeans_Java {
 
@@ -38,7 +36,8 @@ public class KMeans_Java {
         KMeansModel kmd =  km.clusterCenters(k,numitarator);
         return kmd;
     }
-    /**打印所有中心点
+    /**
+     * 打印所有中心点
      @param kmd 模型
      */
     public static void printClusters (KMeansModel kmd){
