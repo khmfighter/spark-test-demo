@@ -16,7 +16,7 @@ object K_Means extends Serializable{
 
   def main(args: Array[String]): Unit = {
 
-    val datadir: String = "data/mllib/test.txt"
+    val datadir: String = "data/mllib/kmeans_data.txt"
     val k = 3  //最大分类数
     val numIterations = 20  //迭代次数
     val a = new K_Means(datadir)
@@ -52,6 +52,15 @@ class K_Means(datadir: String) extends Serializable {
     //计算中心点
     //clusters.clusterCenters.foreach(println)
     clusters
+  }
+  def printCenters (clusters:KMeansModel): util.ArrayList[String] = {
+    val list = new util.ArrayList[String]()
+    clusters.clusterCenters.foreach(toList)
+    def toList(v:Vector)= {
+      list.add(v.toString)
+      //println(v)
+    }
+    list
   }
   // 欧几里得距离 它越小，说明聚类越好
   def ouj(cluster:KMeansModel):Double = {
@@ -157,7 +166,7 @@ class K_Means(datadir: String) extends Serializable {
     (d._1.toInt, avg)
   }
   def stop(): Unit ={
-    sc.stop()
+    this.sc.stop()
   }
 
 }
