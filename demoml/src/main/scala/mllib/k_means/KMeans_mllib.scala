@@ -83,7 +83,10 @@ class K_Means(datadir: String) extends Serializable {
     all/count
   }
   //预测
-  def predict(p_i : Vector, clusters:KMeansModel)=[]
+  def predict(p_i : Vector, clusters:KMeansModel):Int ={
+    val prodicti = clusters.predict(p_i)
+    prodicti
+  }
   // 单点轮廓系数 // 轮廓系数 [-1,1] 越大越好
   def  SCSingle(p_i : Vector, clusters:KMeansModel):Double ={
     //预测该点

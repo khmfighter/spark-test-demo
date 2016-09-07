@@ -3,7 +3,10 @@ package mllib
 import java.io.File
 
 import org.apache.spark.mllib.recommendation.{ALS, MatrixFactorizationModel, Rating}
+import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
+
+import scala.io.Source
 
 //import com.jary.Log_Sc
 

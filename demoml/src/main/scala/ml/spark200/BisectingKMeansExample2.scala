@@ -15,14 +15,12 @@
  * limitations under the License.
  */
 
-package ml
+package ml.spark200
 
 // scalastyle:off println
 
 // $example on$
-import org.apache.spark.ml.clustering.BisectingKMeans
 // $example off$
-import org.apache.spark.sql.SparkSession
 
 /**
  * An example demonstrating bisecting k_means clustering.
