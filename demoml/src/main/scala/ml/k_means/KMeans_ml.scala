@@ -1,5 +1,7 @@
 package ml.k_means
 
+import java.util
+
 import org.apache.commons.math3.ml.distance.EuclideanDistance
 import org.apache.spark.ml.clustering.{KMeans, KMeansModel}
 import org.apache.spark.mllib.linalg.{Vector, Vectors}
@@ -59,9 +61,6 @@ class K_Means(datadir: String) extends Serializable {
     val clusters = kmeans.fit(parsedData)
    // val v = Vectors.dense(1,1,1)
 
-    //计算中心点
-    clusters.clusterCenters.foreach(println)
-
     println("xish "+SCall(clusters))
     //clustersDF.filter("features=[0.0,0.0,0.0]").selectExpr("features").show()
 
@@ -72,7 +71,6 @@ class K_Means(datadir: String) extends Serializable {
   def SCall(clusters:KMeansModel): Double ={
     var all = 0.0
     val clustersDF = clusters.transform(parsedData).select("*").orderBy("label").cache()
-    clustersDF.show()
     val count = clustersDF.count().toInt
     println(count)
     val sample = clustersDF.take({
@@ -88,11 +86,20 @@ class K_Means(datadir: String) extends Serializable {
     all/count
   }
   //预测
-//  def predict(r : Row, clusters:KMeansModel):Int ={
-//
-//    val prodicti = clusters.predict(p_i)
-//    prodicti
-//  }
+  def predict(r : Row, clusters:KMeansModel):Int ={
+    val v :Vector = Vectors.parse(r.getAs(1).toString())
+    val prodicti = r.getInt(2)
+    prodicti
+  }
+  def printCenters (clusters:KMeansModel): util.ArrayList[String] = {
+    val list = new util.ArrayList[String]()
+    clusters.clusterCenters.foreach(toList)
+    def toList(v:Vector)= {
+      list.add(v.toString)
+      //println(v)
+    }
+    list
+  }
   // 单点轮廓系数 // 轮廓系数 [-1,1] 越大越好
   def  SCSingle(r : Row, clusters:KMeansModel):Double ={
     //预测该点
@@ -102,19 +109,18 @@ class K_Means(datadir: String) extends Serializable {
     println(r.toString()+" prodicti is " + prodicti)
 
     //计算各簇 平均距离
-    val clustersDF = clusters.transform(parsedData).select("*").orderBy("label")
-    val dtInPoint_k = clustersDF.map(k_Dis_all(v, _, clusters)).cache()
+    val clustersDF = clusters.transform(parsedData).select("*").orderBy("label").cache()
+    val dtInPoint_k = clustersDF.map(k_Dis_all(v, _, clusters))
     val count = dtInPoint_k.map(a => (a._1, a._2)).reduceByKey(_ + _)
     val reduce = dtInPoint_k.map(a => (a._1, a._3)).reduceByKey(_ + _)
 
     //(0.0,(5.0,5.43840620433566))
     //(1.0,(1.0,12.727922061357855))
     val avg = count.join(reduce).map(mapavg).collect()
-    //val vectoarr= avg.toArray
-    println("all length : " + avg.length)
-    for (i <- 0 to avg.length - 1) {
-      println("all : " + avg {i})
-    }
+//    println("all length : " + avg.length)
+//    for (i <- 0 to avg.length - 1) {
+//      println("all : " + avg {i})
+//    }
     // 从各簇中找出 最小和次小 因为最小可能是簇内距离 则次小就是簇外最小
     var min = avg {0}._2.toDouble//最小值
     var minTh = avg {0}._2.toDouble //次小
@@ -169,7 +175,7 @@ class K_Means(datadir: String) extends Serializable {
     //计算距离 d=sqrt( ∑(xi1-xi2)^ )
     val dis = new EuclideanDistance().compute(this_v, other_v)
     //println("oushi .. "+dis)
-    println("点= " + data + " 属于簇：" + pro + " 距离i点=" + dis)
+   // println("点= " + data + " 属于簇：" + pro + " 距离i点=" + dis)
     (pro.toDouble, 1, dis)
   }
 
