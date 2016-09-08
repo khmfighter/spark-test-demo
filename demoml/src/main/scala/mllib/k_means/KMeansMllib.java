@@ -1,6 +1,6 @@
-package ml.k_means;
+package mllib.k_means;
 
-import org.apache.spark.ml.clustering.KMeansModel;
+import org.apache.spark.mllib.clustering.KMeansModel;
 import org.apache.spark.mllib.linalg.Vector;
 
 import java.util.List;
@@ -8,24 +8,23 @@ import java.util.List;
 /**
  * Created by Jary on 2016/9/2 0002.
  */
-public class KMeans_Java {
+public class KMeansMllib {
 
     public static void main(String [] a){
         String datadir = "data/mllib/kmeans_data.txt";
-
-        KMeans_Java kms =  new KMeans_Java(datadir);
-        KMeansModel kmd =  kms.clusterS(3,29);
-        kms.printClusters(kmd);
-        System.out.println("欧几里得："+kms.euclid(kmd));
-        System.out.println(kms.SCall(kmd));
-        kms.stop();
+        KMeansMllib kmsjava =  new KMeansMllib(datadir);
+        KMeansModel kmd =  kmsjava.clusterS(2,29);
+        // kmsjava.printClusters(kmd);
+        //System.out.println("欧几里得："+kmsjava.euclid(kmd));
+        System.out.println(kmsjava.SCall(kmd));
+        kmsjava.stop();
     }
     static K_Means km=null;
     /**
      * 构造方法 初始化数据源
      @param datadir datasource
      */
-    public KMeans_Java(String datadir){
+    public KMeansMllib(String datadir){
         km = new K_Means(datadir);
     }
     /** 聚类

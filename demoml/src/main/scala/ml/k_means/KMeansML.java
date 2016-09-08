@@ -1,6 +1,6 @@
-package mllib.k_means;
+package ml.k_means;
 
-import org.apache.spark.mllib.clustering.KMeansModel;
+import org.apache.spark.ml.clustering.KMeansModel;
 import org.apache.spark.mllib.linalg.Vector;
 
 import java.util.List;
@@ -8,23 +8,24 @@ import java.util.List;
 /**
  * Created by Jary on 2016/9/2 0002.
  */
-public class KMeans_Java {
+public class KMeansML {
 
     public static void main(String [] a){
         String datadir = "data/mllib/kmeans_data.txt";
-        KMeans_Java kmsjava =  new KMeans_Java(datadir);
-        KMeansModel kmd =  kmsjava.clusterS(2,29);
-        // kmsjava.printClusters(kmd);
-        //System.out.println("欧几里得："+kmsjava.euclid(kmd));
-        System.out.println(kmsjava.SCall(kmd));
-        kmsjava.stop();
+
+        KMeansML kms =  new KMeansML(datadir);
+        KMeansModel kmd =  kms.clusters(3,29);
+        kms.printClusters(kmd);
+        System.out.println("欧几里得："+kms.euclid(kmd));
+        System.out.println(kms.SCall(kmd));
+        kms.stop();
     }
     static K_Means km=null;
     /**
      * 构造方法 初始化数据源
      @param datadir datasource
      */
-    public KMeans_Java(String datadir){
+    public KMeansML(String datadir){
         km = new K_Means(datadir);
     }
     /** 聚类
@@ -32,7 +33,7 @@ public class KMeans_Java {
      @param numitarator 最大迭代次数
      @return KMeansModel 训练后的模型
      */
-    public static  KMeansModel clusterS (int k , int numitarator){
+    public static  KMeansModel clusters(int k , int numitarator){
         KMeansModel kmd =  km.clusterCenters(k,numitarator);
         return kmd;
     }

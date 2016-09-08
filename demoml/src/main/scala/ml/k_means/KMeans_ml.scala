@@ -53,8 +53,8 @@ class K_Means(datadir: String) extends Serializable {
     parsedData
   }
   def clusterCenters(k:Int,numIterations:Int) : KMeansModel= {
-    // Load and parse the data
-    // Cluster the data into two classes using KMeans
+
+    // Cluster the data into two classes using KMeansML
     val kmeans = new KMeans().setK(k).setFeaturesCol("features")
       .setPredictionCol("prediction")
     //训练模型
@@ -117,10 +117,11 @@ class K_Means(datadir: String) extends Serializable {
     //(0.0,(5.0,5.43840620433566))
     //(1.0,(1.0,12.727922061357855))
     val avg = count.join(reduce).map(mapavg).collect()
-//    println("all length : " + avg.length)
-//    for (i <- 0 to avg.length - 1) {
-//      println("all : " + avg {i})
-//    }
+    //val vectoarr= avg.toArray
+    println("all length : " + avg.length)
+    for (i <- 0 to avg.length - 1) {
+      println("all : " + avg {i})
+    }
     // 从各簇中找出 最小和次小 因为最小可能是簇内距离 则次小就是簇外最小
     var min = avg {0}._2.toDouble//最小值
     var minTh = avg {0}._2.toDouble //次小
@@ -175,7 +176,7 @@ class K_Means(datadir: String) extends Serializable {
     //计算距离 d=sqrt( ∑(xi1-xi2)^ )
     val dis = new EuclideanDistance().compute(this_v, other_v)
     //println("oushi .. "+dis)
-   // println("点= " + data + " 属于簇：" + pro + " 距离i点=" + dis)
+    println("点= " + data + " 属于簇：" + pro + " 距离i点=" + dis)
     (pro.toDouble, 1, dis)
   }
 

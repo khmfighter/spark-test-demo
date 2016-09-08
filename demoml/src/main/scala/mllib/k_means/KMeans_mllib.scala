@@ -3,7 +3,6 @@ package mllib.k_means
 
 import java.util
 
-import ml.k_means.K_Means
 import org.apache.commons.math3.ml.distance.EuclideanDistance
 import org.apache.spark.mllib.linalg.Vector
 import org.apache.spark.mllib.clustering.{KMeans, KMeansModel}
@@ -48,7 +47,7 @@ class K_Means(datadir: String) extends Serializable {
 
   def clusterCenters(k:Int,numIterations:Int) : KMeansModel= {
     // Load and parse the data
-    // Cluster the data into two classes using KMeans
+    // Cluster the data into two classes using KMeansML
     val clusters = KMeans.train(parsedData, k, numIterations) //训练模型
     //计算中心点
     //clusters.clusterCenters.foreach(println)
