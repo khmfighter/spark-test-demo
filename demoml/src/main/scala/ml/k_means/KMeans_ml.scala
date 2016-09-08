@@ -1,30 +1,23 @@
+package ml.k_means
 
-package mllib.k_means
-
-import java.util
-
-import ml.k_means.K_Means
 import org.apache.commons.math3.ml.distance.EuclideanDistance
-import org.apache.spark.mllib.linalg.Vector
-import org.apache.spark.mllib.clustering.{KMeans, KMeansModel}
-import org.apache.spark.mllib.linalg.Vectors
-import org.apache.spark.rdd.RDD
+import org.apache.spark.ml.clustering.{KMeans, KMeansModel}
+import org.apache.spark.mllib.linalg.{Vector, Vectors}
+import org.apache.spark.sql.{DataFrame, Row, SQLContext}
 import org.apache.spark.{SparkConf, SparkContext}
 import utils.Spark_Log
 
 
-object K_Means extends Serializable{
-
+object KMeans_ml {
+  //System.setProperty("hadoop.home.dir", "C:\\Program Files (x86)\\hadoop-common-2.2.0-bin-master\\bin");
+  Spark_Log()
   def main(args: Array[String]): Unit = {
-
-    val datadir: String = "data/mllib/kmeans_data.txt"
+    //mllib/sample_kmeans_data.txt
+    val datadir: String = "data/mllib/sample_kmeans_data.txt"
     val k = 3  //最大分类数
     val numIterations = 20  //迭代次数
     val a = new K_Means(datadir)
     val clust = a.clusterCenters(k, numIterations)
-
-    val al = a.SCall(clust)
-    println("轮廓系数" + al)
     a.stop()
   }
 }
@@ -40,40 +33,52 @@ class K_Means(datadir: String) extends Serializable {
     sc
   }
   @transient
-  var parsedData : RDD[Vector] ={
-    val data = sc.textFile(datadir)
-    parsedData = data.map(s => Vectors.dense(s.split(' ').map(_.toDouble))).cache()
+  val sqlContext: SQLContext = {
+    val sqlContext = new SQLContext(sc)
+    sqlContext
+  }
+  @transient
+  var parsedData :DataFrame  ={
+    //val df = sqlContext.read.json("examples/src/main/resources/people.json")
+    val parsedData: DataFrame = sqlContext.createDataFrame(Seq(
+      (1, Vectors.dense(0.0, 0.0, 0.0)),
+      (2, Vectors.dense(0.1, 0.1, 0.1)),
+      (3, Vectors.dense(0.2, 0.2, 0.2)),
+      (4, Vectors.dense(9.0, 9.0, 9.0)),
+      (5, Vectors.dense(9.1, 9.1, 9.1)),
+      (6, Vectors.dense(9.2, 9.2, 9.2))
+    )).toDF("label", "features")
     parsedData
   }
-
   def clusterCenters(k:Int,numIterations:Int) : KMeansModel= {
     // Load and parse the data
     // Cluster the data into two classes using KMeans
-    val clusters = KMeans.train(parsedData, k, numIterations) //训练模型
+    val kmeans = new KMeans().setK(k).setFeaturesCol("features")
+      .setPredictionCol("prediction")
+    //训练模型
+    val clusters = kmeans.fit(parsedData)
+   // val v = Vectors.dense(1,1,1)
+
     //计算中心点
-    //clusters.clusterCenters.foreach(println)
+    clusters.clusterCenters.foreach(println)
+
+    println("xish "+SCall(clusters))
+    //clustersDF.filter("features=[0.0,0.0,0.0]").selectExpr("features").show()
+
     clusters
   }
-  def printCenters (clusters:KMeansModel): util.ArrayList[String] = {
-    val list = new util.ArrayList[String]()
-    clusters.clusterCenters.foreach(toList)
-    def toList(v:Vector)= {
-      list.add(v.toString)
-      //println(v)
-    }
-    list
-  }
-  // 欧几里得距离 它越小，说明聚类越好
-  def ouj(cluster:KMeansModel):Double = {
-    val WSSSE:Double = cluster.computeCost(parsedData)
-    //println("欧几里得距离= " + WSSSE) //平方误差的和
-    WSSSE
-  }
 
+  // 单点轮廓系数 // 轮廓系数 [-1,1] 越大越好
   def SCall(clusters:KMeansModel): Double ={
     var all = 0.0
-    val count = parsedData.count().toInt
-    val sample = parsedData.take(Int.MaxValue)
+    val clustersDF = clusters.transform(parsedData).select("*").orderBy("label").cache()
+    clustersDF.show()
+    val count = clustersDF.count().toInt
+    println(count)
+    val sample = clustersDF.take({
+     if (Int.MaxValue>count)
+       count
+      else  Int.MaxValue})
     for (i <- sample){
       if (i !=null){
         val singr = SCSingle(i, clusters)
@@ -83,18 +88,22 @@ class K_Means(datadir: String) extends Serializable {
     all/count
   }
   //预测
-  def predict(p_i : Vector, clusters:KMeansModel):Int ={
-    val prodicti = clusters.predict(p_i)
-    prodicti
-  }
+//  def predict(r : Row, clusters:KMeansModel):Int ={
+//
+//    val prodicti = clusters.predict(p_i)
+//    prodicti
+//  }
   // 单点轮廓系数 // 轮廓系数 [-1,1] 越大越好
-  def  SCSingle(p_i : Vector, clusters:KMeansModel):Double ={
+  def  SCSingle(r : Row, clusters:KMeansModel):Double ={
     //预测该点
-    val prodicti = clusters.predict(p_i)
-    println(p_i+" prodicti is " + prodicti)
+    val v :Vector = Vectors.parse(r.getAs(1).toString())
+
+    val prodicti = r.getInt(2)
+    println(r.toString()+" prodicti is " + prodicti)
 
     //计算各簇 平均距离
-    val dtInPoint_k = parsedData.map(k_Dis_all(p_i, _, clusters)).cache()
+    val clustersDF = clusters.transform(parsedData).select("*").orderBy("label")
+    val dtInPoint_k = clustersDF.map(k_Dis_all(v, _, clusters)).cache()
     val count = dtInPoint_k.map(a => (a._1, a._2)).reduceByKey(_ + _)
     val reduce = dtInPoint_k.map(a => (a._1, a._3)).reduceByKey(_ + _)
 
@@ -146,34 +155,39 @@ class K_Means(datadir: String) extends Serializable {
     }
     println("a(i) b*(i)的最大值是："+maxa_b)
     val s_i = (outavg - intavg) / maxa_b
-    println("......................"+p_i+"的轮廓系数是="+s_i)
-    println("----------------------------------------------")
-    println("----------------------------------------------")
+    println("......................"+v+"的轮廓系数是="+s_i)
     println("----------------------------------------------")
 
     s_i
   }
   //点到各簇中心内所有点的距离
-  def k_Dis_all(p_i: Vector, data: Vector, clusters: KMeansModel): (Double, Double, Double) = {
-    val pv = p_i.toArray
-    val dv = data.toArray
+  def k_Dis_all(p_i: Vector, data: Row, clusters: KMeansModel): (Double, Double, Double) = {
+    val this_v = p_i.toArray
+    val other_v = Vectors.parse(data.getAs("features").toString).toArray
     //println(dv)
-    val pro = clusters.predict(data)
+    val pro = data.getInt(2)//"prediction"
     //计算距离 d=sqrt( ∑(xi1-xi2)^ )
-    val dis = new EuclideanDistance().compute(pv, dv)
+    val dis = new EuclideanDistance().compute(this_v, other_v)
     //println("oushi .. "+dis)
     println("点= " + data + " 属于簇：" + pro + " 距离i点=" + dis)
-    (pro, 1, dis)
+    (pro.toDouble, 1, dis)
   }
 
-  //点到各簇中心内所有点的平均距离
+  //点到各簇中心内所有点的 平均距离
   def mapavg(d: (Double, (Double, Double))): (Int, Double) = {
     val avg = d._2._2 / d._2._1
     (d._1.toInt, avg)
   }
+
+
+  // 欧几里得距离 它越小，说明聚类越好
+  def ouj(cluster:KMeansModel):Double = {
+    val WSSSE:Double = cluster.computeCost(parsedData)
+    //println("欧几里得距离= " + WSSSE) //平方误差的和
+    WSSSE
+  }
   def stop(): Unit ={
-    this.sc.stop()
+    sc.stop()
   }
 
 }
-

@@ -1,4 +1,4 @@
-package mllib
+package mllib.ALS
 
 import java.io.File
 
