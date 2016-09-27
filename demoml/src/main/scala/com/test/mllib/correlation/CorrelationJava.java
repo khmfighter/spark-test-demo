@@ -1,4 +1,4 @@
-package mllib.correlation;
+package com.test.mllib.correlation;
 
 import java.util.Arrays;
 

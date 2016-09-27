@@ -1,4 +1,4 @@
-package mllib.correlation
+package com.test.mllib.correlation
 
 import org.apache.spark.mllib.linalg.{Matrix, Vector, Vectors}
 import org.apache.spark.mllib.stat.Statistics

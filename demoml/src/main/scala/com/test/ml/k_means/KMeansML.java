@@ -1,4 +1,4 @@
-package ml.k_means;
+package com.test.ml.k_means;
 
 import org.apache.spark.ml.clustering.KMeansModel;
 import org.apache.spark.mllib.linalg.Vector;

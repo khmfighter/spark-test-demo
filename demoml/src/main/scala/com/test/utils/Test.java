@@ -1,4 +1,4 @@
-package utils;
+package com.test.utils;
 
 import java.io.FileWriter;
 import java.io.IOException;
