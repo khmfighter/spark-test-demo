@@ -1,14 +1,13 @@
 package neucloud
 
-import cn.nuecloud.bigdata.utils.Spark_Log
 import org.apache.log4j.Logger
 import org.apache.spark.{SparkConf, SparkContext}
+import utils.Spark_Log
 
 /**
   * Created by Administrator on 2016/8/23 0023.
   */
 object WordCount {
-  private val DEV_ANALYSIS: Logger = Logger.getLogger("analysis")
 
   //  def main(args: Array[String]): Unit = {
   //    val spark = SparkSession.builder.master("local").appName("JavaWordCount").getOrCreate;
@@ -20,9 +19,8 @@ object WordCount {
   def main(args: Array[String]): Unit = {
 
     for (1 <- 1 to 100) {
-      DEV_ANALYSIS.info("jary................")
-      DEV_ANALYSIS.error("adfasfa")
-    }//println("fdasdf")
+      println("fdasdf")
+    }//
   }
   def main3(args: Array[String]): Unit = {
 

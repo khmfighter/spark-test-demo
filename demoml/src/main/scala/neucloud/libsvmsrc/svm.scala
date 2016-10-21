@@ -1,10 +1,10 @@
 package neucloud.libsvmsrc
 
-import cn.nuecloud.bigdata.utils.Spark_Log
 import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.mllib.classification.{SVMModel, SVMWithSGD}
 import org.apache.spark.mllib.evaluation.BinaryClassificationMetrics
 import org.apache.spark.mllib.util.MLUtils
+import utils.Spark_Log
 /**
   * Created by Administrator on 2016/9/26 0026.
   */
