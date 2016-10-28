@@ -21,9 +21,10 @@ object WordCount {
     for (1 <- 1 to 100) {
       println("fdasdf")
     }//
+
+
   }
   def main3(args: Array[String]): Unit = {
-
 
     Spark_Log()
     val conf = new SparkConf().setAppName("other count").setMaster("spark://hadoop1:7077")

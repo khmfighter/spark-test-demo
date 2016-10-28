@@ -12,8 +12,8 @@ import scala.io.Source
 
 
 /**
- * Created by spark on 12/2/15.
- */
+  * Created by spark on 12/2/15.
+  */
 object MovielensALS {
 
   def main(args: Array[String]) {
@@ -25,7 +25,7 @@ object MovielensALS {
     val myRatings = loadRatings("/home/spark/Desktop/data/demo.app.mllib/personalRatings.txt")
     val myRatingsRDD = sc.parallelize(myRatings, 1)
 
-    val movieLensHomedir ="/home/spark/Desktop/data/demo.app.mllib/medium/"
+    val movieLensHomedir = "/home/spark/Desktop/data/demo.app.mllib/medium/"
 
     val ratings = sc.textFile(new File(movieLensHomedir, "ratings.dat").toString).map({
       lines => val fields = lines.split("::")
