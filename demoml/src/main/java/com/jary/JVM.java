@@ -16,7 +16,7 @@ public class JVM {
         System.out.println(Runtime.getRuntime().freeMemory()/1024.0/1024+" M");
         System.out.println(Runtime.getRuntime().totalMemory()/1024.0/1024+" M");
         System.out.println();
-        byte[] b = new byte[34815*1024*1024]; //1 M
+        byte[] b = new byte[2*1024*1024]; //1 M
 
         System.out.println(Runtime.getRuntime().maxMemory()/1024.0/1024+" M");
         System.out.println(Runtime.getRuntime().freeMemory()/1024.0/1024+" M");
