@@ -11,5 +11,12 @@
 
     <artifactId>java_</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.github.tototoshi</groupId>
+            <artifactId>scala-csv</artifactId>
+            <version>1.3.4</version>
+        </dependency>
+    </dependencies>
 
 </project>

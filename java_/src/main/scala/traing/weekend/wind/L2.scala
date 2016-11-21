@@ -1,4 +1,4 @@
-package traing.weekend
+package traing.weekend.wind
 
 /**
   * Created by Administrator on 2016/11/16 0016.
@@ -43,17 +43,20 @@ object L2 {
     /*
       * 列表的基本操作：
       * 上列出了所有的操作都可以体现在以下三个方法来讲：
+
       * 方法	描述
       * head	此方法返回的列表中的第一个元素。
       * tail	此方法返回一个由除了第一个元素外的所有元素的列表。
       * isEmpty	如果列表为空，此方法返回true，否则为false。
       */
+
     //创建统一列表：
     //可以使用List.fill()方法创建，包括相同的元素如下的零个或更多个拷贝的列表：
     val fruits = List.fill(3)("apples") // Repeats apples three times.
     println("fruit : " + fruits)
     val num = List.fill(10)(2) // Repeats 2, 10 times.
     println("num : " + num)
+
 
     //可以使用:::运算符或列表List.:::()方法或List.concat()方法来添加两个或多个列表
     val fruit1 = "apples" :: ("oranges" :: ("pears" :: Nil))
@@ -164,22 +167,6 @@ object LazyOps {
     println(property)
     println(property)
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
 
